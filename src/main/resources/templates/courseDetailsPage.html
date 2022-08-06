@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="UTF-8">
+    <title>Course Details</title>
+    <link type="text/css" href="/css/bootstrap.css" rel="stylesheet">
+    <script src="/js/bootstrap.js"></script>
+</head>
+<body class="bg-dark text-light">
+<div th:insert="/elements/navbar.html"></div>
+<div class="container">
+    <div class="row">
+        <div class="col-12" style="display: flex; flex-direction: column; justify-content: space-around; min-height: 600px">
+            <div style="display: flex; justify-content: space-between; align-content: center">
+                <h1 th:text="${course.name}"></h1>
+                <div style="display: flex; width: 280px; justify-content: space-between;">
+                    <button type="button" class="btn btn-success" style="height: 52px" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                        <h4>Изменить</h4>
+                    </button>
+                    <form th:action="@{'/deleteCourse'}" method="post">
+                        <input type="hidden" th:value="${course.id}" name="courseId">
+                        <button class="btn btn-danger" style="height: 52px"><h4>Удалить</h4></button>
+                    </form>
+                </div>
+
+            </div>
+            <h3>Описание:&nbsp;<span th:text="${course.description}"></span></h3>
+            <h3>Цена:&nbsp;<span th:text="${course.price}"></span></h3>
+            <h3>Рейтинг:&nbsp;<span th:text="${course.rating}"></span></h3>
+            <h3>Автор:&nbsp;<span th:text="${course.author.fullName}"></span></h3>
+            <h3>Категории:&nbsp;<span th:each="category:${course.categories}" th:text="${category.name}+'; '"></span></h3>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade text-dark" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Окно для изменения курса</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="post" th:action="@{'/changeTheCourse'}">
+                <div class="modal-body">
+                    <label for="input1" class="form-label">Введите название нового курса</label>
+                    <input type="text" th:value="${course.name}" name="courseName" id="input1" class="form-control">
+
+                    <label for="input2" class="form-label">Введите описание нового курса</label>
+                    <textarea name="description" th:text="${course.description}" id="input2" class="form-control"></textarea>
+
+                    <label for="input3" class="form-label">Введите рейтинг нового курса</label>
+                    <input type="number" step="0.1" th:value="${course.rating}" class="form-control" id="input3" name="rating">
+
+                    <label for="input4" class="form-label">Введите цену курса</label>
+                    <input type="number" step="1" th:value="${course.price}" class="form-control" id="input4" name="price">
+
+                    <label for="input5" class="form-label">Выберите автора</label>
+                    <select class="form-select" name="authorId" id="input5">
+                        <option th:each="author:${authors}" th:selected="${course.author.fullName==author.fullName}"
+                                th:text="${author.fullName}" th:value="${author.id}"></option>
+                    </select>
+
+                    <input type="hidden" th:value="${course.id}" name="courseId">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                    <button type="submit" class="btn btn-primary">Сохранить</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

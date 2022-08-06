@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org"
+       xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="UTF-8">
+    <title>Course</title>
+    <link type="text/css" href="/css/bootstrap.css" rel="stylesheet">
+    <script src="/js/bootstrap.js"></script>
+</head>
+<body class="bg-dark text-light">
+<div th:insert="/elements/navbar.html"></div>
+<div class="container">
+
+    <div class="row mt-5" sec:authorize="hasAnyRole('ROLE_ADMIN')">
+        <div class="col-12" style="display: flex; justify-content: space-between; align-content: baseline">
+            <div style="display: flex; justify-content: space-between">
+                <button style="height: 54px" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    <h4>Добавить новый курс</h4>
+                </button>
+
+                <form th:action="@{'/deleteCategory'}" method="post" class="ms-3">
+                    <input type="hidden" th:value="${category.id}" name="categoryId">
+                    <button class="btn btn-danger" style="height: 54px"><h4>Удалить</h4></button>
+                </form>
+
+            </div>
+
+            <div style="display: flex; justify-content: space-between">
+                <h1>Категория: <span th:text="${category.name}"></span></h1>
+                <button data-bs-toggle="modal" data-bs-target="#exampleModal1" class="btn-success btn ms-3" style="height: 54px; width: 54px;">✍</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <table class="table table-bordered text-light mt-5">
+                <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Наименование</th>
+                    <th>Описание</th>
+                    <th>Оценка</th>
+                    <th>Автор</th>
+                    <th>Детали</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="course:${courses}">
+                    <td th:text="${course.id}"></td>
+                    <td th:text="${course.name}"></td>
+                    <td th:text="${course.description}"></td>
+                    <td th:text="${course.rating}"></td>
+                    <td th:text="${course.author.fullName}"></td>
+                    <td><a th:href="@{'/course/'+${course.id}}"><button class="btn btn-success">рассмотреть</button></a></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="modal fade text-dark" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Окно добавления нового курса</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="post" th:action="@{'/addNewCourse'}">
+                <div class="modal-body">
+                    <label for="input1" class="form-label">Введите название нового курса</label>
+                    <input type="text" name="courseName" id="input1" class="form-control">
+
+                    <label for="input2" class="form-label">Введите описание нового курса</label>
+                    <textarea name="description" id="input2" class="form-control"></textarea>
+
+                    <label for="input3" class="form-label">Введите рейтинг нового курса</label>
+                    <input type="number" step="0.1" class="form-control" id="input3" name="rating">
+
+                    <label for="input4" class="form-label">Введите цену курса</label>
+                    <input type="number" step="1" class="form-control" id="input4" name="price">
+
+                    <label for="input5" class="form-label">Выберите автора</label>
+                    <select class="form-select" name="authorId" id="input5">
+                        <option th:each="author:${authors}" th:text="${author.fullName}" th:value="${author.id}"></option>
+                    </select>
+
+                    <input type="hidden" th:value="${category.id}" name="categoryId">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                    <button type="submit" class="btn btn-primary">Сохранить</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+<div class="modal fade text-dark" id="exampleModal1" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel1">Окно добавления новой категории</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="post" th:action="@{'/changeCategory'}">
+                <div class="modal-body">
+                    <label for="input6" class="form-label">Введите название новой категории</label>
+                    <input th:value="${category.name}" type="text" name="categoryName" id="input6" class="form-control">
+                    <label for="input7" class="form-label">Введите ссылку на изображение</label>
+                    <input th:value="${category.image}" type="text" name="image" id="input7" class="form-control">
+                    <input type="hidden" th:value="${category.id}" name="categoryId">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                    <button type="submit" class="btn btn-primary">Сохранить</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+
+</body>
+</html>
