@@ -38,16 +38,16 @@ public class SecurityConfig{
         http.authorizeRequests().antMatchers("/css/**", "/js/**").permitAll();
 
         http.formLogin()
-                .loginProcessingUrl("/auth")            //<form action = "/vhod" method = "post">
-                .usernameParameter("user_email")        //<input type = "text" name = "user_email">
-                .passwordParameter("user_password")     //<input type = "password" name = "user_password">
-                .defaultSuccessUrl("/profile")          // response.sendRedirect("/profile")
-                .failureUrl("/enter?loginError")        // response.sendRedirect("/enter?error");
-                .loginPage("/enter").permitAll();       // /enter
+                .loginProcessingUrl("/auth")
+                .usernameParameter("user_email")
+                .passwordParameter("user_password")
+                .defaultSuccessUrl("/profile")
+                .failureUrl("/enter?loginError")
+                .loginPage("/enter").permitAll();
 
         http.logout()
-                .logoutUrl("/logout")                    //<form action = "/vyhod" method = "post">
-                .logoutSuccessUrl("/enter");            // response.sendRedirect("/enter");
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/enter");
 
         return http.build();
     }

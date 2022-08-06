@@ -1,5 +1,7 @@
 package ibragim.project.core.springSecurityFinalProject.services;
 
+import ibragim.project.core.springSecurityFinalProject.dto.UserDTO;
+import ibragim.project.core.springSecurityFinalProject.mappers.UserMapper;
 import ibragim.project.core.springSecurityFinalProject.models.Role;
 import ibragim.project.core.springSecurityFinalProject.models.User;
 import ibragim.project.core.springSecurityFinalProject.repositories.RolesRepository;
@@ -20,10 +22,10 @@ public class UserService implements UserDetailsService {
 
     @Autowired
     private UserRepository userRepository;
-
+    @Autowired
+    private UserMapper userMapper;
     @Autowired
     RolesRepository rolesRepository;
-
     @Autowired
     private PasswordEncoder passwordEncoder;
 
@@ -39,12 +41,21 @@ public class UserService implements UserDetailsService {
         }
     }
 
-    public User registerNewUser(User user){
+    public List<UserDTO> getUsers(){
+        return userMapper.getListOfUserDTOs(userRepository.findAll());
+    }
+
+    public User getUserById(Long id){
+        return userRepository.findById(id).orElse(null);
+    }
+
+    public UserDTO registerNewUser(User user){
         List<Role> roles = new ArrayList<>();
         Role role = rolesRepository.findRoleByRole("ROLE_USER");
         roles.add(role);
         user.setRoles(roles);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        return userRepository.save(user);
+        userRepository.save(user);
+        return userMapper.toUserDTO(user);
     }
 }

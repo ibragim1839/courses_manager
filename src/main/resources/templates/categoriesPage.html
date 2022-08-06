@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="UTF-8">
+    <title>Categories</title>
+</head>
+<body class="bg-dark text-light mb-5">
+<div th:insert="/elements/navbar.html"></div>
+<div class="container">
+
+    <div class="row mt-5" sec:authorize="hasAnyRole('ROLE_ADMIN')">
+        <div class="col-12">
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                <h4>Добавить новую категорию</h4>
+            </button>
+        </div>
+    </div>
+    <div class="row" >
+        <div class="col-4" th:each="category:${categories}">
+            <div class="card text-dark mt-5" style="width: 300px; min-height: 300px;">
+                <img th:src="${category.image}" class="card-img-top mx-auto my-auto" alt="...">
+                <div class="card-body" style="display: flex; flex-direction: column; justify-content: space-around">
+                    <h5 class="card-title" th:text="${category.name}"></h5>
+                    <a th:href="@{'/category/'+${category.id}}" class="btn btn-primary">Просмотреть детально</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+
+
+<div class="modal fade text-dark" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Окно добавления новой категории</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="post" th:action="@{'/addNewCategory'}">
+                <div class="modal-body">
+                    <label for="input1" class="form-label">Введите название новой категории</label>
+                    <input type="text" name="categoryName" id="input1" class="form-control">
+                    <label for="input2" class="form-label">Введите ссылку на изображение</label>
+                    <input type="text" name="image" id="input2" class="form-control">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                    <button type="submit" class="btn btn-primary">Сохранить</button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+</html>

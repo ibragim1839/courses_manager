@@ -15,5 +15,8 @@ public class Category {
     private Long id;
 
     @Column
-    String name;
+    private String name;
+
+    @Column
+    private String image;
 }

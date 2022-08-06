@@ -1,26 +1,27 @@
 <!DOCTYPE html>
 <html xmlns:th="https://www.thymeleaf.org"
       xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
-<head>
-    <meta charset="UTF-8">
-    <title>Main page</title>
-</head>
-<body class="bg-dark text-light">
-<div th:insert="/elements/navbar.html"></div>
-<div class="container mt-5">
-    <div class="row">
-        <div class="col-6 mx-auto">
-            <div sec:authorize="isAuthenticated()">
-                <h1 class="text-center">Вы уже онлайн!<br>Можете приступать к знакомству с <a th:href="@{'/store'}">сайтом</a></h1>
-            </div>
+    <head>
+        <meta charset="UTF-8">
+        <title>Main page</title>
+    </head>
+    <body class="bg-dark text-light">
+        <div th:insert="/elements/navbar.html"></div>
+        <div class="container mt-5">
+            <div class="row">
+                <div class="col-6 mx-auto">
+                    <div sec:authorize="isAuthenticated()">
+                        <h1 class="text-center">Вы уже онлайн!<br>Можете приступать к знакомству с <a th:href="@{'/store'}">сайтом</a>
+                            или посетить свой <a th:href="@{'/profile'}">профиль</a></h1>
+                    </div>
 
-            <div sec:authorize!="isAuthenticated()" class="text-center">
-                <h3><a th:href="@{'/registration'}">Перейти на страницу регистрации</a></h3>
-                <h3 class="mt-4"><a th:href="${'/enter'}">Перейти на страницу входа в аккаунт</a></h3>
-            </div>
+                    <div sec:authorize="isAnonymous()" class="text-center">
+                        <h3><a th:href="@{'/registration'}">Перейти на страницу регистрации</a></h3>
+                        <h3 class="mt-4"><a th:href="${'/enter'}">Перейти на страницу входа в аккаунт</a></h3>
+                    </div>
 
+                </div>
+            </div>
         </div>
-    </div>
-</div>
-</body>
+    </body>
 </html>
