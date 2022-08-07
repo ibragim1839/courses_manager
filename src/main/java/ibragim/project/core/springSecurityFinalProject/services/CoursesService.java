@@ -20,6 +20,30 @@ public class CoursesService {
     private final CoursesRepository coursesRepository;
     private final CategoriesRepository categoriesRepository;
 
+    public Course addNewCategoryToACourse(Long courseId, Long categoryId){
+        if(courseId!=null && categoryId!=null){
+            Category category = categoriesRepository.findById(categoryId).orElse(null);
+            Course course = getCourseById(courseId);
+            if(course!=null && category!=null){
+                course.getCategories().add(category);
+                return addNewCourse(course);
+            }
+        }
+        return null;
+    }
+
+    public Course deleteCategoryFromACourse(Long courseId, Long categoryId){
+        if(courseId!=null && categoryId!=null){
+            Category category = categoriesRepository.findById(categoryId).orElse(null);
+            Course course = getCourseById(courseId);
+            if(course!=null && category!=null){
+                course.getCategories().remove(category);
+                return addNewCourse(course);
+            }
+        }
+        return null;
+    }
+
     public List<Course> getCoursesByCategoryId(Long id){
         Category category = categoriesRepository.findById(id).orElse(null);
         if(category!=null){
@@ -57,5 +81,9 @@ public class CoursesService {
         else{
             return false;
         }
+    }
+
+    public List<Course> getAllCourses(){
+        return coursesRepository.findAll();
     }
 }

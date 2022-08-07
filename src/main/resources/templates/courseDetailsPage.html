@@ -7,11 +7,11 @@
     <link type="text/css" href="/css/bootstrap.css" rel="stylesheet">
     <script src="/js/bootstrap.js"></script>
 </head>
-<body class="bg-dark text-light">
+<body class="bg-dark text-light pb-5">
 <div th:insert="/elements/navbar.html"></div>
 <div class="container">
     <div class="row">
-        <div class="col-12" style="display: flex; flex-direction: column; justify-content: space-around; min-height: 600px">
+        <div class="col-12" style="display: flex; flex-direction: column; justify-content: space-around; min-height: 500px">
             <div style="display: flex; justify-content: space-between; align-content: center">
                 <h1 th:text="${course.name}"></h1>
                 <div style="display: flex; width: 280px; justify-content: space-between;">
@@ -29,9 +29,36 @@
             <h3>Цена:&nbsp;<span th:text="${course.price}"></span></h3>
             <h3>Рейтинг:&nbsp;<span th:text="${course.rating}"></span></h3>
             <h3>Автор:&nbsp;<span th:text="${course.author.fullName}"></span></h3>
-            <h3>Категории:&nbsp;<span th:each="category:${course.categories}" th:text="${category.name}+'; '"></span></h3>
         </div>
     </div>
+
+    <div class="row">
+        <h3>Категории:</h3>
+        <div class="col-12 mt-4"  style="display: flex">
+            <div th:each="category:${course.categories}" class="me-4 text-light" style="display: flex; max-height: 80px" >
+                <button style="height: 100% ;border-bottom-right-radius: 0; border-top-right-radius: 0; " class="text-light btn btn-danger"><h3><span th:text="${category.name}"></span></h3></button>
+                <form th:action="@{'/deleteCategoryFromACourse'}" method="post">
+                    <button style="border-bottom-left-radius: 0; height: 100%; border-top-left-radius: 0;" type="submit" class="btn btn-danger"><h3>×</h3></button>
+                    <input th:value="${course.id}" hidden th:name="course_id">
+                    <input th:value="${category.id}" hidden th:name="category_id">
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12 mt-4" style="display: flex">
+            <div th:each="category:${categories}" class="me-4 text-light" style="display: flex; max-height: 80px" >
+                <button style="height: 100% ;border-bottom-right-radius: 0; border-top-right-radius: 0; " class="text-light btn bg-success"><h3><span th:text="${category.name}"></span></h3></button>
+                <form th:action="@{'/addNewCategoryToACourse'}" method="post">
+                    <button style="border-bottom-left-radius: 0; height: 100%; border-top-left-radius: 0;" type="submit" class="btn btn-success"><h3>+</h3></button>
+                    <input th:value="${course.id}" hidden th:name="course_id">
+                    <input th:value="${category.id}" hidden th:name="category_id">
+                </form>
+            </div>
+        </div>
+    </div>
+
 </div>
 
 
@@ -70,7 +97,6 @@
                     <button type="submit" class="btn btn-primary">Сохранить</button>
                 </div>
             </form>
-
         </div>
     </div>
 </div>

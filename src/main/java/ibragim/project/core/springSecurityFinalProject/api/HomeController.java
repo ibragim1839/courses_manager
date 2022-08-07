@@ -139,7 +139,10 @@ public class HomeController {
     public String getCourse(@PathVariable(name = "id") Long courseId, Model model){
         if(coursesService.getCourseById(courseId)!=null){
             model.addAttribute("course", coursesService.getCourseById(courseId));
-            model.addAttribute("categories", categoriesService.getCategories());
+            List<Category> c1 = categoriesService.getCategories();
+            List<Category> c2 = coursesService.getCourseById(courseId).getCategories();
+            c1.removeAll(c2);
+            model.addAttribute("categories", c1);
             model.addAttribute("authors", userService.getUsers());
             return "courseDetailsPage";
         }
@@ -197,10 +200,28 @@ public class HomeController {
         return "redirect:/categories";
     }
 
+
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    @PostMapping(value = "/addNewCategoryToACourse")
+    public String addNewCategoryToACourse(@RequestParam(name="course_id")Long courseId,
+                                          @RequestParam(name="category_id")Long categoryId){
+        coursesService.addNewCategoryToACourse(courseId, categoryId);
+        return "redirect:/course/"+courseId;
+    }
+
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    @PostMapping(value = "/deleteCategoryFromACourse")
+    public String deleteCategoryFromACourse(@RequestParam(name="course_id")Long courseId,
+                                          @RequestParam(name="category_id")Long categoryId){
+        coursesService.deleteCategoryFromACourse(courseId, categoryId);
+        return "redirect:/course/"+courseId;
+    }
+
     @GetMapping(value = "/unknown")
     public String getErrorPage(){
         return "errorPage";
     }
+
 
 
 
